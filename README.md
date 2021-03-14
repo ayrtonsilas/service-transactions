@@ -13,13 +13,6 @@
  - PHP Unit
  - Repository Pattern | SOLID
 
-## Como instalar
-
-Instalar as dependências
-```bash
-$ docker-compose up --build -d
-```
-
 ## Criar o arquivo .env com base no .example
 
 ```
@@ -38,6 +31,13 @@ RABBITMQ_PASSWORD=guest
 
 URL_AUTH=https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6
 URL_SEND_MESSAGE=https://run.mocky.io/v3/b19f7b9f-9cbf-4fc6-ad22-dc30601aec04
+```
+
+## Como instalar
+
+Instalar as dependências
+```bash
+$ docker-compose up --build -d
 ```
 
 ## Docker

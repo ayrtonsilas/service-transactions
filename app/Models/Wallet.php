@@ -11,4 +11,8 @@ class Wallet extends Model
     protected $table = 'wallets';
     protected $primaryKey = 'id';
     protected $fillable = ['user', 'amount'];
+
+    public function user(){
+        return $this->hasOne(User::class, 'id', 'user')->first();
+    }
 }
