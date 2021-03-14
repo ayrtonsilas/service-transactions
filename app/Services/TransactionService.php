@@ -29,6 +29,31 @@ class TransactionService implements TransactionServiceInterface
     }
 
     /**
+     * Validation new Transaction
+     * @param array $transactionData
+     * @return array 
+     */
+    private function validationTransaction(array $transactionData){
+        if ($transactionData['payer'] == $transactionData['payee']) {
+            return ['status' => 400, 'errorMessage' => 'Payer must be different from Payee'];
+        }
+
+        $wallet = $this->walletService->getWalletByUser($transactionData['payer']);
+        $canSendValue = $this->userService->canSendValue($transactionData['payer']);
+
+        if (
+            !isset($wallet['result']) ||
+            ($wallet['result']['amount'] < $transactionData['value'])
+        ) {
+            return ['status' => 400, 'errorMessage' => 'User without amount'];
+        }
+        if (!isset($canSendValue['result']) || $canSendValue['result'] !== true) {
+            return ['status' => 400, 'errorMessage' => 'User is a shopkeeper'];
+        }
+        return ['status' => 200];
+    }
+
+    /**
      * Get all transactions
      * @return array
      */
@@ -65,21 +90,9 @@ class TransactionService implements TransactionServiceInterface
     public function makeTransaction(array $transactionData)
     {
         try {
-            if ($transactionData['payer'] == $transactionData['payee']) {
-                return ['status' => 400, 'errorMessage' => 'Payer must be different from Payee'];
-            }
-
-            $wallet = $this->walletService->getWalletByUser($transactionData['payer']);
-            $canSendValue = $this->userService->canSendValue($transactionData['payer']);
-
-            if (
-                !isset($wallet['result']) ||
-                ($wallet['result']['amount'] < $transactionData['value'])
-            ) {
-                return ['status' => 400, 'errorMessage' => 'User without amount'];
-            }
-            if (!isset($canSendValue['result']) || $canSendValue['result'] !== true) {
-                return ['status' => 400, 'errorMessage' => 'User is a shopkeeper'];
+            $validateTransaction = $this->validationTransaction($transactionData);
+            if($validateTransaction['status'] != 200){
+                return $validateTransaction;
             }
 
             $debit = $this->walletService->updateWallet(
