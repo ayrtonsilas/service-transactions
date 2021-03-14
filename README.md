@@ -4,13 +4,14 @@
  - Cadastrar Usuários
  - Transferir dinheiro
  
-## Tecnologias
+## Tecnologias / Patterns
  - PHP
  - Laravel
  - Mysql
  - RabbitMQ
  - Docker
  - PHP Unit
+ - Repository Pattern | SOLID
 
 ## Como instalar
 
