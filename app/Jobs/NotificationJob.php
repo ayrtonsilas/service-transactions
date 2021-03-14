@@ -39,7 +39,7 @@ class NotificationJob implements ShouldQueue, NotificationJobInterface
                 throw new \Exception("Error Processing Request");
             }
             
-            $response = json_decode(Http::get('https://run.mocky.io/v3/b19f7b9f-9cbf-4fc6-ad22-dc30601aec04')->body(), true);
+            $response = json_decode(Http::get(env('URL_SEND_MESSAGE'))->body(), true);
 
             if ($response['message'] === 'Enviado') {
                 print_r($this->data);

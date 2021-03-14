@@ -33,6 +33,3 @@ Route::prefix('transactions')->group(function () {
     Route::get('/', [TransactionController::class, 'index']);
 });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});

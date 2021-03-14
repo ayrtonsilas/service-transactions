@@ -18,7 +18,7 @@ class CreateTransaction extends FormRequest
      */
     public function authorize()
     {
-        $response = json_decode(Http::get('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6')->body(), true);
+        $response = json_decode(Http::get(env('URL_AUTH'))->body(), true);
         return $response['message'] === 'Autorizado';
     }
 

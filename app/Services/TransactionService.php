@@ -34,7 +34,6 @@ class TransactionService implements TransactionServiceInterface
      */
     public function getAllTransactions()
     {
-        return $this->transactionRepository->getAllTransactions();
         try {
             $transactions = $this->transactionRepository->getAllTransactions();
             return ['status' => 200, 'result' => $transactions];

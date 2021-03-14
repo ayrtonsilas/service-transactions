@@ -20,10 +20,7 @@ class TransactionController extends Controller
 
     public function index()
     {
-        NotificationJob::dispatch(['a' => 1])->afterCommit();
-        return;
         $transactions = $this->transactionService->getAllTransactions();
-
         return ResourceResponse::getInstance($transactions)
             ->response()
             ->setStatusCode($transactions['status']);

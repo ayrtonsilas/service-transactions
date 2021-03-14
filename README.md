@@ -1,62 +1,245 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Projeto de Transferência de Dinheiro
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Funcionalidades
+ - Cadastrar Usuários
+ - Transferir dinheiro
+ 
+## Tecnologias
+ - PHP
+ - Laravel
+ - Mysql
+ - RabbitMQ
+ - Docker
+ - PHP Unit
 
-## About Laravel
+## Como instalar
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Instalar as dependências
+```bash
+$ docker-compose up --build -d
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Criar o arquivo .env com base no .example
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```
+DB_CONNECTION=mysql
+DB_HOST=transactions_database
+DB_PORT=3306
+DB_DATABASE=app
+DB_USERNAME=root
+DB_PASSWORD=root
 
-## Learning Laravel
+RABBITMQ_QUEUE=notifications
+RABBITMQ_HOST=rabbitmq
+RABBITMQ_PORT=5672
+RABBITMQ_USER=guest
+RABBITMQ_PASSWORD=guest
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+URL_AUTH=https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6
+URL_SEND_MESSAGE=https://run.mocky.io/v3/b19f7b9f-9cbf-4fc6-ad22-dc30601aec04
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Docker
+Executar o docker usando o `docker-compose`
+```bash
+$ docker-compose up --build -d
+```
 
-## Laravel Sponsors
+## URL da api tem o préfixo
+```
+http://localhost:8000/api
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Estrutura do banco
+<img src="https://github.com/ayrtonsilas/service-transactions/blob/main/docs/service-transactions.png" />
 
-### Premium Partners
+## Estrutura de comunicação
+<img src="https://github.com/ayrtonsilas/service-transactions/blob/main/docs/transaction-flux.png" />
+## Testes
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+```bash
+$ php artisan test
+```
 
-## Contributing
+```
+  PASS  Tests\Unit\TransactionTest
+  ✓ new transaction
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   PASS  Tests\Unit\UserTest
+  ✓ new user
 
-## Code of Conduct
+   PASS  Tests\Feature\TransactionRequestTest
+  ✓ required fields
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   PASS  Tests\Feature\UserRequestTest
+  ✓ required fields
 
-## Security Vulnerabilities
+  Tests:  4 passed
+  Time:   1.67s
+```
+## Rotas
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Usuários
 
-## License
+```
+[GET] /users
+```
+Response: `200`
+```
+...
+"data": [
+        {
+            "id": 1,
+            "name": "BBB",
+            "email": "BBB@bbb.com",
+            "register_code": "40481895060",
+            "type": "user",
+            "created_at": "2021-03-14T00:40:57.000000Z",
+            "updated_at": "2021-03-14T00:40:57.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "AAA",
+            "email": "AAA@bbb.com",
+            "register_code": "54917408024",
+            "type": "user",
+            "created_at": "2021-03-14T00:41:13.000000Z",
+            "updated_at": "2021-03-14T00:41:13.000000Z"
+        }
+    ],
+...
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+------------
+
+```
+[GET] /users/:id
+```
+Response: `200`
+```
+{
+    "data": {
+        "id": 1,
+        "name": "BBB",
+        "email": "BBB@bbb.com",
+        "register_code": "40481895060",
+        "type": "user",
+        "created_at": "2021-03-14T00:40:57.000000Z",
+        "updated_at": "2021-03-14T00:40:57.000000Z"
+    }
+}
+```
+
+------------
+
+```
+[POST] /users
+```
+Body
+```
+{
+    "name": "CCC",
+    "register_code" : "51994442042",
+    "email" : "CCC@CCC.com",
+    "type" : "user",
+    "amount" : 10
+}
+```
+Response: `201`
+```
+{
+    "data": {
+        "name": "CCC",
+        "register_code": "51994442042",
+        "email": "CCC@CCC.com",
+        "type": "user",
+        "updated_at": "2021-03-14T02:13:36.000000Z",
+        "created_at": "2021-03-14T02:13:36.000000Z",
+        "id": 3
+    }
+}
+```
+
+------------
+
+### Transações
+```
+[GET] /transactions
+```
+Response: `200`
+```
+...
+"data": [
+        {
+            "id": 1,
+            "payer": 2,
+            "payee": 1,
+            "value": 5,
+            "created_at": "2021-03-14T00:47:04.000000Z",
+            "updated_at": "2021-03-14T00:47:04.000000Z"
+        },
+        {
+            "id": 2,
+            "payer": 2,
+            "payee": 1,
+            "value": 5,
+            "created_at": "2021-03-14T01:17:34.000000Z",
+            "updated_at": "2021-03-14T01:17:34.000000Z"
+        }
+    ]
+...
+```
+
+------------
+
+```
+[GET] /transactions/:id
+```
+Response: `200`
+```
+{
+    "data": {
+        "id": 1,
+        "payer": 2,
+        "payee": 1,
+        "value": 5,
+        "created_at": "2021-03-14T00:47:04.000000Z",
+        "updated_at": "2021-03-14T00:47:04.000000Z"
+    }
+}
+```
+
+------------
+
+```
+[POST] /transactions
+```
+Body
+```
+{
+    "payer": 2,
+    "payee" : 1,
+    "value" : 5
+}
+```
+Response: `201`
+```
+{
+    "data": {
+        "payer": 2,
+        "payee": 1,
+        "value": 5,
+        "updated_at": "2021-03-14T01:17:34.000000Z",
+        "created_at": "2021-03-14T01:17:34.000000Z",
+        "id": 2
+    }
+}
+```
+
+## Acesso ao RabbitMQ
+
+```
+http://localhost:15672/
+```
+usuário: `guest`
+senha: `guest`
